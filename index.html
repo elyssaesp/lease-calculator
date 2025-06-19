@@ -1,4 +1,4 @@
-<!-- Force rebuild for GitHub Pages -->
+<!-- Final clean version: No reset button, no formula display -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -46,7 +46,7 @@
     }
 
     .lease-calc-container button {
-      width: 48%;
+      width: 100%;
       padding: 12px;
       background-color: #046172;
       color: white;
@@ -55,12 +55,6 @@
       cursor: pointer;
       font-size: 16px;
       margin-top: 10px;
-    }
-
-    .lease-calc-container button.reset {
-      background-color: #ccc;
-      color: #000;
-      margin-left: 4%;
     }
 
     .lease-calc-container p {
@@ -74,13 +68,6 @@
       color: red;
       font-weight: normal;
       margin-top: 10px;
-    }
-
-    small {
-      font-weight: normal;
-      display: block;
-      margin-top: 8px;
-      color: #666;
     }
   </style>
 </head>
@@ -105,7 +92,6 @@
     <input type="number" id="landSize" placeholder="e.g. 4000" />
 
     <button onclick="calculateLeaseRenewal()">Calculate</button>
-    <button class="reset" onclick="resetForm()">Reset</button>
 
     <p id="result"></p>
     <p id="error"></p>
@@ -129,35 +115,18 @@
       }
 
       let result = 0;
-      let formulaText = "";
 
       if (location === "selangor") {
         result = (1/4) * (1/100) * A * (99 - B) * C;
-        formulaText = "(1/4) × (1/100) × Market Value × (99 - Years Remaining) × Land Size";
       } else if (location === "kl") {
         result = (1/4) * A * (1/99) * (99 - B) * C;
-        formulaText = "(1/4) × Market Value × (1/99) × (99 - Years Remaining) × Land Size";
       }
 
       const formattedResult = result.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
-      resultEl.innerHTML = `
-        Estimated Lease Renewal Cost: <strong>RM ${formattedResult}</strong><br>
-        <small>Formula: ${formulaText}</small>
-      `;
-    }
-
-    function resetForm() {
-      document.getElementById("location").value = "selangor";
-      document.getElementById("marketValue").value = "";
-      document.getElementById("yearsRemaining").value = "";
-      document.getElementById("landSize").value = "";
-      document.getElementById("result").innerHTML = "";
-      document.getElementById("error").innerText = "";
+      resultEl.innerHTML = `Estimated Lease Renewal Cost: <strong>RM ${formattedResult}</strong>`;
     }
   </script>
 
 </body>
 </html>
-
-Move index.html to root for GitHub Pages
