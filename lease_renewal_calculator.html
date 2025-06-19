@@ -1,3 +1,4 @@
+<!-- Force rebuild for GitHub Pages -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,6 +10,7 @@
       font-family: Arial, sans-serif;
       background: #f1f1f1;
       padding: 20px;
+      margin: 0;
     }
 
     .lease-calc-container {
@@ -34,7 +36,7 @@
 
     .lease-calc-container input,
     .lease-calc-container select {
-      width: 50%;
+      width: 100%;
       padding: 8px;
       margin-top: 4px;
       margin-bottom: 12px;
@@ -44,7 +46,7 @@
     }
 
     .lease-calc-container button {
-      width: 50%;
+      width: 48%;
       padding: 12px;
       background-color: #046172;
       color: white;
@@ -55,11 +57,30 @@
       margin-top: 10px;
     }
 
+    .lease-calc-container button.reset {
+      background-color: #ccc;
+      color: #000;
+      margin-left: 4%;
+    }
+
     .lease-calc-container p {
       margin-top: 20px;
       font-weight: bold;
       color: #333;
       text-align: center;
+    }
+
+    #error {
+      color: red;
+      font-weight: normal;
+      margin-top: 10px;
+    }
+
+    small {
+      font-weight: normal;
+      display: block;
+      margin-top: 8px;
+      color: #666;
     }
   </style>
 </head>
@@ -84,8 +105,10 @@
     <input type="number" id="landSize" placeholder="e.g. 4000" />
 
     <button onclick="calculateLeaseRenewal()">Calculate</button>
+    <button class="reset" onclick="resetForm()">Reset</button>
 
     <p id="result"></p>
+    <p id="error"></p>
   </div>
 
   <script>
@@ -95,23 +118,46 @@
       const B = parseFloat(document.getElementById("yearsRemaining").value);
       const C = parseFloat(document.getElementById("landSize").value);
       const resultEl = document.getElementById("result");
+      const errorEl = document.getElementById("error");
 
-      if (isNaN(A) || isNaN(B) || isNaN(C) || B < 0 || B >= 99) {
-        resultEl.innerText = "Please enter valid values. Years remaining must be between 0 and 98.";
+      resultEl.innerHTML = "";
+      errorEl.innerText = "";
+
+      if (isNaN(A) || isNaN(B) || isNaN(C) || A <= 0 || B <= 0 || C <= 0 || B >= 99) {
+        errorEl.innerText = "Please enter valid values. All numbers must be greater than 0, and years remaining must be less than 99.";
         return;
       }
 
       let result = 0;
+      let formulaText = "";
 
       if (location === "selangor") {
         result = (1/4) * (1/100) * A * (99 - B) * C;
+        formulaText = "(1/4) × (1/100) × Market Value × (99 - Years Remaining) × Land Size";
       } else if (location === "kl") {
         result = (1/4) * A * (1/99) * (99 - B) * C;
+        formulaText = "(1/4) × Market Value × (1/99) × (99 - Years Remaining) × Land Size";
       }
 
-      resultEl.innerText = "Estimated Lease Renewal Cost: RM " + result.toFixed(2);
+      const formattedResult = result.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+      resultEl.innerHTML = `
+        Estimated Lease Renewal Cost: <strong>RM ${formattedResult}</strong><br>
+        <small>Formula: ${formulaText}</small>
+      `;
+    }
+
+    function resetForm() {
+      document.getElementById("location").value = "selangor";
+      document.getElementById("marketValue").value = "";
+      document.getElementById("yearsRemaining").value = "";
+      document.getElementById("landSize").value = "";
+      document.getElementById("result").innerHTML = "";
+      document.getElementById("error").innerText = "";
     }
   </script>
 
 </body>
 </html>
+
+Update index.html – force rebuild to update GitHub Pages
