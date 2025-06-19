@@ -1,149 +1,160 @@
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    background: #f1f1f1;
-    padding: 20px;
-    margin: 0;
-  }
-
-  .lease-calc-container {
-    max-width: 420px;
-    margin: auto;
-    background: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-  }
-
-  .lease-calc-container h3 {
-    text-align: center;
-    margin-bottom: 20px;
-    color: #046172;
-  }
-
-  .lease-calc-container label {
-    font-weight: bold;
-    display: block;
-    margin-top: 10px;
-  }
-
-  .lease-calc-container input,
-  .lease-calc-container select {
-    width: 100%;
-    padding: 8px;
-    margin-top: 4px;
-    margin-bottom: 12px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-  }
-
-  .lease-calc-container button {
-    width: 48%;
-    padding: 12px;
-    background-color: #046172;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-    margin-top: 10px;
-  }
-
-  .lease-calc-container button.reset {
-    background-color: #ccc;
-    color: #000;
-    margin-left: 4%;
-  }
-
-  .lease-calc-container p {
-    margin-top: 20px;
-    font-weight: bold;
-    color: #333;
-    text-align: center;
-  }
-
-  #error {
-    color: red;
-    font-weight: normal;
-    margin-top: 10px;
-  }
-
-  small {
-    font-weight: normal;
-    display: block;
-    margin-top: 8px;
-    color: #666;
-  }
-</style>
-
-<div class="lease-calc-container">
-  <h3>Lease Renewal Cost Calculator</h3>
-
-  <label for="location">Location:</label>
-  <select id="location">
-    <option value="selangor">Selangor</option>
-    <option value="kl">Kuala Lumpur</option>
-  </select>
-
-  <label for="marketValue">Market Value of Land (RM/PSF):</label>
-  <input type="number" id="marketValue" placeholder="e.g. 250" />
-
-  <label for="yearsRemaining">Years Remaining on Lease:</label>
-  <input type="number" id="yearsRemaining" placeholder="e.g. 35" />
-
-  <label for="landSize">Land Size (sqft):</label>
-  <input type="number" id="landSize" placeholder="e.g. 4000" />
-
-  <button onclick="calculateLeaseRenewal()">Calculate</button>
-  <button class="reset" onclick="resetForm()">Reset</button>
-
-  <p id="result"></p>
-  <p id="error"></p>
-</div>
-
-<script>
-  function calculateLeaseRenewal() {
-    const location = document.getElementById("location").value;
-    const A = parseFloat(document.getElementById("marketValue").value);
-    const B = parseFloat(document.getElementById("yearsRemaining").value);
-    const C = parseFloat(document.getElementById("landSize").value);
-    const resultEl = document.getElementById("result");
-    const errorEl = document.getElementById("error");
-
-    resultEl.innerHTML = "";
-    errorEl.innerText = "";
-
-    if (isNaN(A) || isNaN(B) || isNaN(C) || A <= 0 || B <= 0 || C <= 0 || B >= 99) {
-      errorEl.innerText = "Please enter valid values. All numbers must be greater than 0, and years remaining must be less than 99.";
-      return;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lease Renewal Cost Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f1f1f1;
+      padding: 20px;
+      margin: 0;
     }
 
-    let result = 0;
-    let formulaText = "";
-
-    if (location === "selangor") {
-      result = (1/4) * (1/100) * A * (99 - B) * C;
-      formulaText = "(1/4) × (1/100) × Market Value × (99 - Years Remaining) × Land Size";
-    } else if (location === "kl") {
-      result = (1/4) * A * (1/99) * (99 - B) * C;
-      formulaText = "(1/4) × Market Value × (1/99) × (99 - Years Remaining) × Land Size";
+    .lease-calc-container {
+      max-width: 420px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
 
-    const formattedResult = result.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    .lease-calc-container h3 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #046172;
+    }
 
-    resultEl.innerHTML = `
-      Estimated Lease Renewal Cost: <strong>RM ${formattedResult}</strong><br>
-      <small>Formula: ${formulaText}</small>
-    `;
-  }
+    .lease-calc-container label {
+      font-weight: bold;
+      display: block;
+      margin-top: 10px;
+    }
 
-  function resetForm() {
-    document.getElementById("location").value = "selangor";
-    document.getElementById("marketValue").value = "";
-    document.getElementById("yearsRemaining").value = "";
-    document.getElementById("landSize").value = "";
-    document.getElementById("result").innerHTML = "";
-    document.getElementById("error").innerText = "";
-  }
-</script>
+    .lease-calc-container input,
+    .lease-calc-container select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 4px;
+      margin-bottom: 12px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    .lease-calc-container button {
+      width: 48%;
+      padding: 12px;
+      background-color: #046172;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-top: 10px;
+    }
+
+    .lease-calc-container button.reset {
+      background-color: #ccc;
+      color: #000;
+      margin-left: 4%;
+    }
+
+    .lease-calc-container p {
+      margin-top: 20px;
+      font-weight: bold;
+      color: #333;
+      text-align: center;
+    }
+
+    #error {
+      color: red;
+      font-weight: normal;
+      margin-top: 10px;
+    }
+
+    small {
+      font-weight: normal;
+      display: block;
+      margin-top: 8px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="lease-calc-container">
+    <h3>Lease Renewal Cost Calculator</h3>
+
+    <label for="location">Location:</label>
+    <select id="location">
+      <option value="selangor">Selangor</option>
+      <option value="kl">Kuala Lumpur</option>
+    </select>
+
+    <label for="marketValue">Market Value of Land (RM/PSF):</label>
+    <input type="number" id="marketValue" placeholder="e.g. 250" />
+
+    <label for="yearsRemaining">Years Remaining on Lease:</label>
+    <input type="number" id="yearsRemaining" placeholder="e.g. 35" />
+
+    <label for="landSize">Land Size (sqft):</label>
+    <input type="number" id="landSize" placeholder="e.g. 4000" />
+
+    <button onclick="calculateLeaseRenewal()">Calculate</button>
+    <button class="reset" onclick="resetForm()">Reset</button>
+
+    <p id="result"></p>
+    <p id="error"></p>
+  </div>
+
+  <script>
+    function calculateLeaseRenewal() {
+      const location = document.getElementById("location").value;
+      const A = parseFloat(document.getElementById("marketValue").value);
+      const B = parseFloat(document.getElementById("yearsRemaining").value);
+      const C = parseFloat(document.getElementById("landSize").value);
+      const resultEl = document.getElementById("result");
+      const errorEl = document.getElementById("error");
+
+      resultEl.innerHTML = "";
+      errorEl.innerText = "";
+
+      if (isNaN(A) || isNaN(B) || isNaN(C) || A <= 0 || B <= 0 || C <= 0 || B >= 99) {
+        errorEl.innerText = "Please enter valid values. All numbers must be greater than 0, and years remaining must be less than 99.";
+        return;
+      }
+
+      let result = 0;
+      let formulaText = "";
+
+      if (location === "selangor") {
+        result = (1/4) * (1/100) * A * (99 - B) * C;
+        formulaText = "(1/4) × (1/100) × Market Value × (99 - Years Remaining) × Land Size";
+      } else if (location === "kl") {
+        result = (1/4) * A * (1/99) * (99 - B) * C;
+        formulaText = "(1/4) × Market Value × (1/99) × (99 - Years Remaining) × Land Size";
+      }
+
+      const formattedResult = result.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+      resultEl.innerHTML = `
+        Estimated Lease Renewal Cost: <strong>RM ${formattedResult}</strong><br>
+        <small>Formula: ${formulaText}</small>
+      `;
+    }
+
+    function resetForm() {
+      document.getElementById("location").value = "selangor";
+      document.getElementById("marketValue").value = "";
+      document.getElementById("yearsRemaining").value = "";
+      document.getElementById("landSize").value = "";
+      document.getElementById("result").innerHTML = "";
+      document.getElementById("error").innerText = "";
+    }
+  </script>
+
+</body>
+</html>
